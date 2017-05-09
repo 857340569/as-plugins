@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.SEND_SMS"/>  
     <uses-permission android:name="android.permission.RECEIVE_SMS"/> 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />  
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
@@ -14,16 +15,29 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+         <receiver android:name="com.zjp.zonlytools.sms.receiver.BootBroadcastReceiver">  
+                <intent-filter>  
+                    <action android:name="android.intent.action.BOOT_COMPLETED"></action>  
+                    <category android:name="android.intent.category.LAUNCHER" />  
+                </intent-filter>  
+         </receiver>  
+        <service android:name="com.zjp.zonlytools.sms.SmsService">
+             <intent-filter>
+					<action android:name="com.zjp.zonlytools.sms.ACTION_SMS"></action>  
+                    <action android:name="com.zjp.zonlytools.sms.ACTION_SMS_RECEIVED"></action>  
+                </intent-filter>
+        </service>
     </application>
 
 </manifest>
