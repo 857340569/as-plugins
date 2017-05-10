@@ -1,6 +1,7 @@
 package com.zjp.zonlytools.sms.receiver;
 
 import com.zjp.zonlytools.sms.SmsService;
+import com.zjp.zonlytools.sms.utils.ServiceUtils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,15 +28,9 @@ public class SmsBroadcaseReceiver extends BroadcastReceiver {
                  sb.append(curMsg.getDisplayMessageBody());  
              } 
          }
-         Intent mIntent = createServiceIntent(context,SmsService.ACTION_SMS_RECEIVED);
+         Intent mIntent = ServiceUtils.createServiceIntent(context,SmsService.ACTION_SMS_RECEIVED);
          context.startService(mIntent);
 	}
 	
-	private Intent createServiceIntent(Context context,String action)
-	{
-		Intent mIntent = new Intent();
-		mIntent.setAction(action);// 你定义的service的action
-		mIntent.setPackage(context.getPackageName());
-		return mIntent;
-	}
+	
 }
