@@ -46,30 +46,10 @@ public class MainActivity extends Activity {
 //		            }  
 //			}
 //		}, intentFilter);
-//		startService(SmsService.ACTION_SMS);
-//		startService(SmsService.ACTION_SMS);
-//		startService(SmsService.ACTION_SMS);
-		startService(SmsService.class);
-		startService(SmsService.class);
-		startService(SmsService.class);
-	}
-	protected void  startService(String action) {
-		Intent mIntent = new Intent();  
-		mIntent.setAction(action);//你定义的service的action  
-		mIntent.setPackage(getPackageName());
-		startService(mIntent);
-		
-	}
-	protected void  startService(Class<?> service) {
-		Intent mIntent = new Intent(this,service);  
-		mIntent.setPackage(getPackageName());
-		startService(mIntent);
-		
 	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		System.out.println("MainActivity.onDestroy()");
-		startService(SmsService.ACTION_SMS);
 	}
 }
