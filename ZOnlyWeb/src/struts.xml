@@ -4,14 +4,19 @@
     "http://struts.apache.org/dtds/struts-2.3.dtd"> 
 
 <struts>
+	<!-- 配置教程http://kingxss.iteye.com/blog/1622455 -->
 	<!-- ,json-default -->
 	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
 	<package name="default" namespace="/" extends="struts-default,json-default ">
-		<action name="login" class="com.hnn.cd.action.LoginAction">
+		<action name="login" class="com.onlypxz.web.action.LoginAction">
 			<result name="json" type="json"></result>
-			<result name="error">/error.jsp</result>
-			<allowed-methods>login,login3</allowed-methods>
+			<result name="error">/test.jsp</result>
+			<allowed-methods>login,showResult</allowed-methods>
 		</action>
 	</package>
-	
+	<!-- 显式 声明调用函数，如method="test2" 则不用配置allowed-methods-->
+	<package name="login" namespace="/" extends="struts-default,json-default ">
+		<action name="test123" class="com.onlypxz.web.action.LoginAction" method="test2">
+		</action>
+	</package>
 </struts>
