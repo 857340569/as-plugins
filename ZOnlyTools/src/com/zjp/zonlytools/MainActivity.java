@@ -1,6 +1,7 @@
 package com.zjp.zonlytools;
 
 import com.zjp.zonlytools.sms.SmsService;
+import com.zjp.zonlytools.sms.utils.SmsUtils;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -19,7 +20,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		content=(TextView) findViewById(R.id.content);
-		content.setText(1);
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		intentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
 //		            }  
 //			}
 //		}, intentFilter);
+		System.out.println(SmsUtils.getSmsInfos(this));
 	}
 	@Override
 	protected void onDestroy() {

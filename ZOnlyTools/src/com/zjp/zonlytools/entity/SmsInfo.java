@@ -7,8 +7,11 @@ package com.zjp.zonlytools.entity;
 public class SmsInfo {
 	
 	private int id;
-	private String msgFrom;
-	private String msgTo;
+	private String msgType;//收发类型  1表示接收  2表示发送  
+	private String msgFromNumber;
+	private String msgFromName;
+	private String msgToNumber;
+	private String msgToName;
 	private String msgTime;
 	private String msgContent;
 
@@ -20,20 +23,44 @@ public class SmsInfo {
 		this.id = id;
 	}
 
-	public String getMsgFrom() {
-		return msgFrom;
+	public String getMsgType() {
+		return msgType;
 	}
 
-	public void setMsgFrom(String msgFrom) {
-		this.msgFrom = msgFrom;
+	public void setMsgType(String msgType) {
+		this.msgType = msgType;
 	}
 
-	public String getMsgTo() {
-		return msgTo;
+	public String getMsgFromNumber() {
+		return msgFromNumber;
 	}
 
-	public void setMsgTo(String msgTo) {
-		this.msgTo = msgTo;
+	public void setMsgFromNumber(String msgFromNumber) {
+		this.msgFromNumber = msgFromNumber;
+	}
+
+	public String getMsgFromName() {
+		return msgFromName;
+	}
+
+	public void setMsgFromName(String msgFromName) {
+		this.msgFromName = msgFromName;
+	}
+
+	public String getMsgToNumber() {
+		return msgToNumber;
+	}
+
+	public void setMsgToNumber(String msgToNumber) {
+		this.msgToNumber = msgToNumber;
+	}
+
+	public String getMsgToName() {
+		return msgToName;
+	}
+
+	public void setMsgToName(String msgToName) {
+		this.msgToName = msgToName;
 	}
 
 	public String getMsgTime() {
@@ -52,4 +79,10 @@ public class SmsInfo {
 		this.msgContent = msgContent;
 	}
 
+	@Override
+	public String toString() {
+		return "SmsInfo [id=" + id + ", msgType=" + msgType + ", msgFromNumber=" + msgFromNumber + ", msgFromName="
+				+ msgFromName + ", msgToNumber=" + msgToNumber + ", msgToName=" + msgToName + ", msgTime=" + msgTime
+				+ ", msgContent=" + msgContent + "]";
+	}
 }
