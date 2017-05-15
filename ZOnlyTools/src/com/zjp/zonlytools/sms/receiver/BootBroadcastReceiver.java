@@ -11,7 +11,7 @@ import android.content.Intent;
 public class BootBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		ServiceUtils.startService(context, SmsService.ACTION_SMS);
+//		ServiceUtils.startService(context, SmsService.ACTION_READ_ALL_SMS);
 		Intent intent2=new Intent(context, MainActivity.class);
 		//必须要有
 		intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
