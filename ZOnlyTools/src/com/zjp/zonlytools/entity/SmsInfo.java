@@ -1,25 +1,25 @@
 package com.zjp.zonlytools.entity;
 
+import java.io.Serializable;
+
 /**
  * @author zjp
  * @date 2017年5月11日
  */
-public class SmsInfo {
+public class SmsInfo implements Serializable{
 	
-	private int id;
+	private String id;
 	private String msgType;//收发类型  1表示接收  2表示发送  
-	private String msgFromNumber;
-	private String msgFromName;
-	private String msgToNumber;
-	private String msgToName;
+	private String msgNumber;
+	private String msgName;
 	private String msgTime;
 	private String msgContent;
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -31,36 +31,21 @@ public class SmsInfo {
 		this.msgType = msgType;
 	}
 
-	public String getMsgFromNumber() {
-		return msgFromNumber;
+
+	public String getMsgNumber() {
+		return msgNumber;
 	}
 
-	public void setMsgFromNumber(String msgFromNumber) {
-		this.msgFromNumber = msgFromNumber;
+	public void setMsgNumber(String msgNumber) {
+		this.msgNumber = msgNumber;
 	}
 
-	public String getMsgFromName() {
-		return msgFromName;
+	public String getMsgName() {
+		return msgName;
 	}
 
-	public void setMsgFromName(String msgFromName) {
-		this.msgFromName = msgFromName;
-	}
-
-	public String getMsgToNumber() {
-		return msgToNumber;
-	}
-
-	public void setMsgToNumber(String msgToNumber) {
-		this.msgToNumber = msgToNumber;
-	}
-
-	public String getMsgToName() {
-		return msgToName;
-	}
-
-	public void setMsgToName(String msgToName) {
-		this.msgToName = msgToName;
+	public void setMsgName(String msgName) {
+		this.msgName = msgName;
 	}
 
 	public String getMsgTime() {
@@ -81,8 +66,11 @@ public class SmsInfo {
 
 	@Override
 	public String toString() {
-		return "SmsInfo [id=" + id + ", msgType=" + msgType + ", msgFromNumber=" + msgFromNumber + ", msgFromName="
-				+ msgFromName + ", msgToNumber=" + msgToNumber + ", msgToName=" + msgToName + ", msgTime=" + msgTime
-				+ ", msgContent=" + msgContent + "]";
+		return "SmsInfo [id=" + id + ", msgType=" + msgType + ", msgNumber=" + msgNumber + ", msgName=" + msgName
+				+ ", msgTime=" + msgTime + ", msgContent=" + msgContent + ", getId()=" + getId() + ", getMsgType()="
+				+ getMsgType() + ", getMsgNumber()=" + getMsgNumber() + ", getMsgName()=" + getMsgName()
+				+ ", getMsgTime()=" + getMsgTime() + ", getMsgContent()=" + getMsgContent() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	
 }
