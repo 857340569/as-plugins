@@ -3,6 +3,7 @@ package com.onlypxz.web.action;
 import java.io.IOException;
 
 import com.onlypxz.web.base.BaseAction;
+import com.onlypxz.web.entity.SmsInfo;
 
 public class LoginAction extends BaseAction {
 	private String name;
@@ -13,14 +14,13 @@ public class LoginAction extends BaseAction {
 	}
 	
 	public void showResult() throws IOException{  
-	    //JSONÔÚ´«µÝ¹ý³ÌÖÐÊÇÆÕÍ¨×Ö·û´®ÐÎÊ½´«µÝµÄ£¬ÕâÀï¼òµ¥Æ´½ÓÒ»¸ö×ö²âÊÔ  
-	    String jsonString="{\"user\":{\"id\":\"123\",\"name\":\"ÕÅÈý\",\"say\":\"Hello , i am a action to print a json!\",\"password\":\"JSON\"},\"success\":true}";  
+	    //JSONï¿½Ú´ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ÝµÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ´ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
+	    String jsonString="{\"user\":{\"id\":\"123\",\"name\":\"ï¿½ï¿½ï¿½ï¿½\",\"say\":\"Hello , i am a action to print a json!\",\"password\":\"JSON\"},\"success\":true}";  
 	    println(jsonString);  
 	}  
 	public void test2() throws IOException{  
-	    //JSONÔÚ´«µÝ¹ý³ÌÖÐÊÇÆÕÍ¨×Ö·û´®ÐÎÊ½´«µÝµÄ£¬ÕâÀï¼òµ¥Æ´½ÓÒ»¸ö×ö²âÊÔ  
-	    String jsonString="{\"user\":{\"id\":\"123\",\"name\":\"ÕÅÈý\",\"say\":\"Hello , i am a action to print a json!\",\"password\":\"JSON\"}}";  
-	    println(jsonString);  
+	   SmsInfo smsInfo=onRequest(SmsInfo.class);
+	    println(smsInfo.toString());  
 	}  
 	
 	public String getName() {
