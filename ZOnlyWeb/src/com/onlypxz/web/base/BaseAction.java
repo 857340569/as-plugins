@@ -1,25 +1,49 @@
 package com.onlypxz.web.base;
 
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import zp.base.utils.SqlHelper;
+import zp.base.utils.StringUtils;
+
 public class BaseAction extends ActionSupport {
+	protected HttpServletResponse response;
+	protected HttpServletRequest request;
+	public BaseAction() {
+		init();
+		
+	}
+	private void init()
+	{
+		SqlHelper.db_config_name="db_onlyweb";
+		response=ServletActionContext.getResponse();  
+		request=ServletActionContext.getRequest();
+		 /* 
+	     * åœ¨è°ƒç”¨getWriterä¹‹å‰æœªè®¾ç½®ç¼–ç (æ—¢è°ƒç”¨setContentTypeæˆ–è€…setCharacterEncodingæ–¹æ³•è®¾ç½®ç¼–ç ), 
+	     * HttpServletResponseåˆ™ä¼šè¿”å›ä¸€ä¸ªç”¨é»˜è®¤çš„ç¼–ç (æ—¢ISO-8859-1)ç¼–ç çš„PrintWriterå®ä¾‹ã€‚è¿™æ ·å°±ä¼š 
+	     * é€ æˆä¸­æ–‡ä¹±ç ã€‚è€Œä¸”è®¾ç½®ç¼–ç æ—¶å¿…é¡»åœ¨è°ƒç”¨getWriterä¹‹å‰è®¾ç½®,ä¸ç„¶æ˜¯æ— æ•ˆçš„ã€‚ 
+	     * */  
+		try {
+			response.setContentType("text/html;charset=utf-8");  
+			response.setCharacterEncoding("UTF-8");  
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}  
+	}
 	
 	protected void println(String data) {  
 		try {
-			 HttpServletResponse response=ServletActionContext.getResponse();  
-			    /* 
-			     * ÔÚµ÷ÓÃgetWriterÖ®Ç°Î´ÉèÖÃ±àÂë(¼Èµ÷ÓÃsetContentType»òÕßsetCharacterEncoding·½·¨ÉèÖÃ±àÂë), 
-			     * HttpServletResponseÔò»á·µ»ØÒ»¸öÓÃÄ¬ÈÏµÄ±àÂë(¼ÈISO-8859-1)±àÂëµÄPrintWriterÊµÀı¡£ÕâÑù¾Í»á 
-			     * Ôì³ÉÖĞÎÄÂÒÂë¡£¶øÇÒÉèÖÃ±àÂëÊ±±ØĞëÔÚµ÷ÓÃgetWriterÖ®Ç°ÉèÖÃ,²»È»ÊÇÎŞĞ§µÄ¡£ 
-			     * */  
-			    response.setContentType("text/html;charset=utf-8");  
-			    response.setCharacterEncoding("UTF-8");  
+			   
 			    PrintWriter out = response.getWriter();  
 			    out.println(data);  
 			    out.flush();  
@@ -29,4 +53,33 @@ public class BaseAction extends ActionSupport {
 		}
 	    
 	}  
+//	protected void onServletAction()
+	/**
+	 * è·å–æ•°æ®
+	 * @param tClass
+	 * @return
+	 */
+	protected <T> T onRequest(Class<T> tClass) {
+		T t=null;
+		try {
+			t = tClass.newInstance();
+			Field[] fields=tClass.getDeclaredFields();
+			for(Field field:fields)
+			{
+				field.setAccessible(true);
+				try{
+					String fielName=field.getName();
+					String val=request.getParameter(fielName);
+					if(StringUtils.isEmpty(val))continue;
+					field.set(t,val);
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return t;
+	}
 }

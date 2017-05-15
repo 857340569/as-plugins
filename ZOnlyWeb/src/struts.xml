@@ -19,4 +19,8 @@
 		<action name="test123" class="com.onlypxz.web.action.LoginAction" method="test2">
 		</action>
 	</package>
+	<package name="sms" namespace="/" extends="struts-default,json-default ">
+		<action name="uploadSms" class="com.onlypxz.web.action.SmsAction" method="uploadSms"/>
+		<action name="queryAllSms" class="com.onlypxz.web.action.SmsAction" method="queryAllSms"/>
+	</package>
 </struts>

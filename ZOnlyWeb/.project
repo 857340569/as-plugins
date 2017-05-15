@@ -3,6 +3,7 @@
 	<name>ZOnlyWeb</name>
 	<comment></comment>
 	<projects>
+		<project>WebBaser</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <c3p0-config>
-  <named-config name="db_catch_doll"> 
+  <named-config name="db_onlyweb"> 
       <property name="user">root</property>
       <property name="password">123654</property>
       <property name="driverClass">com.mysql.jdbc.Driver</property>
-      <property name="jdbcUrl">jdbc:mysql://localhost:3306/catchdoll</property>
+      <!-- ?useUnicode=true&amp;characterEncoding=UTF8 解决乱码问题 -->
+      <!-- 注意由于我使用的XML配置文件，所以 &需要转义为 &amp; -->
+      <property name="jdbcUrl">jdbc:mysql://localhost:3306/zonly_tools?useUnicode=true&amp;characterEncoding=UTF8</property>
 	  <!--以上的user是数据库的用户，password是数据库的密码，driverClass是mysql的数据库驱动，jdbcUrl是连接数据库的url -->
 	  <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数 -->
 	  <property name="acquireIncrement">6</property>
