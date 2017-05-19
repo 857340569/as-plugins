@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="user_head_wh">60dp</dimen>
+    <dimen name="main_viewpager_height">130dp</dimen>
+    
+    <!-- 首页grid item 宽度 -->
+    <dimen name="common_main_grid_width">100dp</dimen>
+    <dimen name="stu_main_grid_width">80dp</dimen>
+    <dimen name="stu_main_grid_padding">10dp</dimen>
+    
+    <dimen name="login_logo_width">97dp</dimen>
+    <dimen name="login_logo_height">87dp</dimen>
+</resources>

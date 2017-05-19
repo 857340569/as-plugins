@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- #C1C1C1  193,193,193 -->
+    <!-- #FF840D  255,132,13 -->
+    
+    <color name="color_stu_bg">#eeeeee</color><!-- 238,238,238 -->
+    <color name="color_other_bg">#F2F2F2</color>
+    <color name="color_other_bg_dark">#DFDFDF</color>
+    <color name="color_stu_theme">#44C9AA</color>
+    <color name="color_teacher_theme">#44ADEF</color>
+    <color name="color_parent_theme">#FF7C7C</color>
+    <color name="color_other_theme">#00A2FF</color>
+    <!-- 外框线颜色 -->
+    <color name="color_common_line_dark">#c5c5c5</color><!-- 197,197,197 -->
+    <color name="color_common_line">#e0e0e0</color><!-- 224,224,224 -->
+    <color name="color_grid_border">#e4e4e4</color><!-- 228,228,228 -->
+    <color name="color_text_black_dark">#333</color>
+    <color name="color_text_black">#666</color>
+    <color name="color_text_gray_dark">#999</color>
+    <color name="color_text_gray">#C6C6C6</color>
+    <color name="color_text_gray2">#C9C9C9</color>
+    <color name="color_blue_dark2">#017FF7</color>
+    <color name="color_blue_dark">#54B9FF</color>
+    <color name="color_blue_normal">#40B4F1</color>
+    <color name="color_green">#62E4B4</color>
+    <color name="color_red">#F46C6E</color>
+    <color name="color_purple">#7EA2FF</color>
+    
+    <!-- <0 请假  0-未签  1-正常   2-迟到  3 缺勤   -->
+    <color name="attend_leave_color">#2BF3CF</color>
+    <color name="attend_none_color">#D4D4D4</color>
+    <color name="attend_success_color">#44ADEF</color>
+    <color name="attend_delay_color">#FFB846</color>
+    <color name="attend_error_color">#FF8383</color>
+    
+    <color name="color_commom_text_red">#FF0000</color>
+    <color name="color_common_text_black_dark">#484848</color><!-- 72,72,72 -->
+    <color name="color_common_text_black_dark2">#000</color><!-- 72,72,72 -->
+    <color name="color_common_text_black">#595959</color><!-- 89,89,89 -->
+    <color name="color_common_text_gray">#ACACAC</color><!-- 172,172,172 -->
+    <color name="color_common_text_gray_dark">#828282</color><!-- 172,172,172 -->
+    <color name="color_common_disenabled">#AAAAAA</color>
+    <color name="color_prt_text_black">#333</color>
+    <color name="color_prt_gray_line">#cfcfcf</color>
+    
+    <!-- for zxing -->
+    <color name="transparent">#00000000</color>
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="header">#58567D</color>
+    <color name="grgray">#686868</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#c0ffff00</color>  
+    
+
+    <color name="lightgreen">#99CC33</color>
+    <color name="green">#00CC00</color>
+
+	<color name="login_color_role_selected">#00A3F6</color>
+    <color name="black">#666</color>
+    <color name="login_edt_grey">#ADADAD</color>
+    
+    <color name="selective_course_color_black">#484848</color>  <!-- 72,72,72 -->
+    <color name="selective_course_color_gray">#828282</color> <!-- 130,130,130 -->
+    <color name="selective_course_color_opt_border">#DCDCDC</color> <!-- 220,220,220 --> 
+    
+    <color name="color_orange_primary">#FF6600</color>
+    <color name="color_orange">#F77622</color>
+    <color name="color_alpha_black">#88000000</color>
+    <!-- 18%透明度 255*18%=45.9=46  转换成十六进制2e -->
+    <color name="color_alpha_white">#2effffff</color>
+    
+    <!-- 成绩等级颜色 -->
+    <!-- 不及格、合格、良好、优秀-->
+    <color name="color_score_lv1">#FF8182</color>
+    <color name="color_score_lv2">#FF8434</color>
+    <color name="color_score_lv3">#57B5FD</color>
+    <color name="color_score_lv4">#BACF08</color>
+    
+    <!-- 聊天 -->
+    <color name="color_chat_theme">#00A2FF</color>
+    
+</resources>
+
