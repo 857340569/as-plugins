@@ -8,8 +8,11 @@ import zp.baseandroid.debug.DebugUtils;
 
 public class SystemConfig extends BaseSystemConfig{
 	static{
-		SoftName="ZOnlyTools";
-		ServerUrl="http://192.168.2.142/ZOnlyWeb/";
+//		SoftName="ZOnlyTools";
+//		ServerUrl="http://192.168.2.142/ZOnlyWeb/";
+		SoftName="SFLSMobile";
+		ServerUrl="http://www.sfls.com.cn:9994/service/api/";
+		
 		// 开启日志调试
 		DebugUtils.isLogOpen = true;
 		DebugUtils.debugIp = "192.168.2.142";
