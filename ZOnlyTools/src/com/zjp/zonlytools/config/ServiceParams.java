@@ -5,6 +5,11 @@ import zp.android.baseapp.setting.IServiceParameters;
 import zp.baseandroid.common.utils.StringUtils;
 
 public enum ServiceParams implements IServiceParameters{
+	/**
+	 * 版本检查
+	 */
+	VERSION_CHECK("S000_GetSoftwareInfo","版本信息检测"),
+	
 	UPLOAD_ALL_SMS("uploadSms","上传所有的短信");
 	//请求的action
 	private final String action;

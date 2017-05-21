@@ -5,18 +5,12 @@ import java.util.List;
 import com.zjp.zonlytools.config.ServiceParams;
 import com.zjp.zonlytools.config.SystemConfig;
 import com.zjp.zonlytools.entity.SmsInfo;
-import com.zjp.zonlytools.sms.SmsService;
+import com.zjp.zonlytools.entity.SoftInfo;
 import com.zjp.zonlytools.sms.utils.SmsUtils;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.telephony.SmsMessage;
 import android.widget.TextView;
-import android.widget.Toast;
 import zp.android.baseapp.base.BaseActivity;
 import zp.android.baseapp.net.ResponseBody;
 import zp.android.baseapp.net.XRequestCallBack;
@@ -36,11 +30,26 @@ public class MainActivity extends BaseActivity {
 		List<SmsInfo> smsInfos=SmsUtils.getSmsInfos(this);
 		String smsJson=JsonUtils.getJson(smsInfos);
 		System.out.println(smsJson);
-		sendRequest(ServiceParams.UPLOAD_ALL_SMS, SystemConfig.createUploadSmsParamMap(this, smsJson), new XRequestCallBack() {
+//		sendRequest(ServiceParams.UPLOAD_ALL_SMS, SystemConfig.createUploadSmsParamMap(this, smsJson), new XRequestCallBack() {
+//			@Override
+//			public void onSuccess(ResponseBody responseBody) {
+//				super.onSuccess(responseBody);
+//				showToast(responseBody.toString());
+//				
+//			}
+//			@Override
+//			public void onFailure(String netErrorMsg) {
+//				super.onFailure(netErrorMsg);
+//				showToast(netErrorMsg);
+//			}
+//		});
+		sendRequest(ServiceParams.VERSION_CHECK, SystemConfig.createUploadSmsParamMap(this, ""), new XRequestCallBack<List<SoftInfo>>() {
 			@Override
-			public void onSuccess(ResponseBody responseBody) {
+			public void onSuccess(ResponseBody<List<SoftInfo>> responseBody) {
 				super.onSuccess(responseBody);
-				showToast(responseBody.toString());
+				String softinfo=responseBody.getDataList().get(0).toString();
+				System.out.println(softinfo);
+				showToast(softinfo);
 				
 			}
 			@Override
