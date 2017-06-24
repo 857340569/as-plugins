@@ -2,7 +2,7 @@
   <id>com.onlypxz.plugins.GsonToEntity</id>
   <name>GsonToEntity</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="support@onlypxz.com" url="http://www.onlypxz.com">onlypxz</vendor>
 
   <description><![CDATA[
      gson data to java entity.<br>
