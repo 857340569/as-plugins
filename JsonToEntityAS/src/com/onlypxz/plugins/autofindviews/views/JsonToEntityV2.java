@@ -49,7 +49,7 @@ public class JsonToEntityV2 extends BaseFrame {
 		setResizable(false);
 		//若想直接运行，需要把images 放到src 目录下
 		setIconImage(getImageIcon("/images/tools_icon.jpg").getImage());
-		//不能用EXIT_ON_CLOSE eclipse 会退出
+		//不能用EXIT_ON_CLOSE as 会退出
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(534, 416);
