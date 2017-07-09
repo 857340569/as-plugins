@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import zp.myhotfix.test.Test;
 import zp.myhotfix.utils.HotFixEngine;
 import zp.myhotfix.utils.TextUtils;
 import zp.myhotfix.view.SpanableStringTextView;
@@ -35,7 +36,8 @@ public class SecondActivity extends Activity {
         show_info_view = findView(R.id.show_info_view);
         listview = findView(R.id.listview);
 //        show_info_view.setText("I'm bugs!");
-        show_info_view.setText("I'm fixed! ok");
+//        show_info_view.setText("I'm fixed! ok");
+        show_info_view.setText("计算"+ Test.getResult(5,2));
         listview.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {

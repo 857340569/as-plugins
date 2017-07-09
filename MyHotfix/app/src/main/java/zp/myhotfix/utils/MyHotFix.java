@@ -17,85 +17,26 @@ import dalvik.system.PathClassLoader;
 
 public class MyHotFix {
 
-    public static final String DEX_OPT_DIR = "optimize_dex";//dex的优化路径
-    public static final String DEX_BASECLASSLOADER_CLASS_NAME = "dalvik.system.BaseDexClassLoader";
-    public static final String DEX_FILE_E = "dex";//扩展名
-    public static final String DEX_ELEMENTS_FIELD = "dexElements";//pathList中的dexElements字段
-    public static final String DEX_PATHLIST_FIELD = "pathList";//BaseClassLoader中的pathList字段
-    public static final String FIX_DEX_PATH = "fix_dex";//fixDex存储的路径
 
-
-    /**
-     * 获得pathList中的dexElements
-     *
-     * @param obj
-     * @return
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     */
-    public Object getDexElements(Object obj) throws NoSuchFieldException, IllegalAccessException {
-        return getField(obj, DEX_ELEMENTS_FIELD);
+    private Context context;
+    private MyHotFix(Context context)
+    {
+        this.context=context;
     }
 
-    public interface LoadDexFileInterruptCallback {
-        boolean loadDexFile(File file);
-    }
-
-    /**
-     * 获取指定classloader 中的pathList字段的值（DexPathList）
-     *
-     * @param classLoader
-     * @return
-     */
-//    public Object getDexPathListField(Object classLoader) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-//        return getField(classLoader, Class.forName(DEX_BASECLASSLOADER_CLASS_NAME), DEX_PATHLIST_FIELD);
-//    }
-
-
-    public Object getField(Object obj, Class<?> claz,String fieldName) throws NoSuchFieldException, IllegalAccessException {
-        Field field = claz.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(obj);
-
-    }
-    /**
-     * 获取一个字段的值
-     *
-     * @return
-     */
-    public Object getField(Object obj,String fieldName) throws NoSuchFieldException, IllegalAccessException {
-        Class<?> claz=obj.getClass();
-        Field field = claz.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(obj);
-
-    }
-
-    /**
-     * 为指定对象中的字段重新赋值
-     *
-     * @param obj
-     * @param filed
-     * @param value
-     */
-    public void setFiledValue(Object obj, String filed, Object value) throws NoSuchFieldException, IllegalAccessException {
-        Class<?> claz=obj.getClass();
-        Field field = claz.getDeclaredField(filed);
-        field.setAccessible(true);
-        field.set(obj, value);
-//        field.setAccessible(false);
+    public static MyHotFix create(Context context)
+    {
+        return  new MyHotFix(context);
     }
 
     /**
      * 合并dex
-     *
-     * @param context
      * @param fixDexPath
      */
-    public void mergeDex(Context context, File fixDexPath, File dexFile) {
+    private boolean mergeDexAndApply(File fixDexPath, File appDexFile) {
         try {
             //创建dex的optimize路径
-            File optimizeDir = new File(fixDexPath.getAbsolutePath(), DEX_OPT_DIR);
+            File optimizeDir = new File(fixDexPath.getAbsolutePath(), "optimize_dex");////dex的优化路径
             if (!optimizeDir.exists()) {
                 optimizeDir.mkdir();
             }
@@ -103,104 +44,106 @@ public class MyHotFix {
             PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();
             //找到dex并通过DexClassLoader去加载
             //dex文件路径，优化输出路径，null,父加载器
-            DexClassLoader dexClassLoader = new DexClassLoader(dexFile.getAbsolutePath(), optimizeDir.getAbsolutePath(), null, pathClassLoader);
+            DexClassLoader dexClassLoader = new DexClassLoader(appDexFile.getAbsolutePath(), optimizeDir.getAbsolutePath(), null, pathClassLoader);
             //获取app自身的BaseDexClassLoader中的pathList字段
-            Object appDexPathList = getDexPathListField(pathClassLoader);
+            Object appDexPathList = ReflectUtil.getFieldValue(pathClassLoader,Class.forName("dalvik.system.BaseDexClassLoader"), "pathList");
             //获取补丁的BaseDexClassLoader中的pathList字段
-            Object fixDexPathList = getDexPathListField(dexClassLoader);
+            Object fixDexPathList = ReflectUtil.getFieldValue(dexClassLoader,Class.forName("dalvik.system.BaseDexClassLoader"), "pathList");
 
-            Object appDexElements = getDexElements(appDexPathList);
-            Object fixDexElements = getDexElements(fixDexPathList);
+            //获得pathList中的dexElements
+            Object appDexElements = ReflectUtil.getFieldValue(appDexPathList,null,"dexElements");
+            Object fixDexElements = ReflectUtil.getFieldValue(fixDexPathList,null,"dexElements");
             //合并两个elements的数据，将修复的dex插入到数组最前面
             Object finalElements = combineArray(fixDexElements, appDexElements);
             //给app 中的dex pathList 中的dexElements 重新赋值
-            setFiledValue(appDexPathList,DEX_ELEMENTS_FIELD, finalElements);
-            Toast.makeText(context, "修复成功!", Toast.LENGTH_SHORT).show();
-
+            boolean isSuccess=ReflectUtil.setFiledValue(appDexPathList,"dexElements", finalElements);
+            return isSuccess;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return  false;
     }
 
     /**
-     * 两个数组合并
+     * 两个DexElement数组合并
      *
-     * @param arrayLhs
-     * @param arrayRhs
+     * @param fixDexElementArray 补丁dex元素数组
+     * @param appDexElementsArray app dex元素数组
      * @return
      */
-    private static Object combineArray(Object arrayLhs, Object arrayRhs) {
-        Class<?> localClass = arrayLhs.getClass().getComponentType();
-        int i = Array.getLength(arrayLhs);
-        int j = i + Array.getLength(arrayRhs);
+    private  Object combineArray(Object fixDexElementArray, Object appDexElementsArray) {
+        Class<?> localClass = fixDexElementArray.getClass().getComponentType();
+        int i = Array.getLength(fixDexElementArray);
+        int j = i + Array.getLength(appDexElementsArray);
         Object result = Array.newInstance(localClass, j);
         for (int k = 0; k < j; ++k) {
             if (k < i) {
-                Array.set(result, k, Array.get(arrayLhs, k));
+                Array.set(result, k, Array.get(fixDexElementArray, k));
             } else {
-                Array.set(result, k, Array.get(arrayRhs, k - i));
+                Array.set(result, k, Array.get(appDexElementsArray, k - i));
             }
         }
         return result;
     }
 
+
+
     /**
      * 复制SD卡中的补丁文件到dex目录
      */
-    public static void copyDexFileToAppAndFix(Context context, String dexFileName, boolean copyAndFix) {
-        File path = new File(Environment.getExternalStorageDirectory(), dexFileName);
-        if (!path.exists()) {
-            Toast.makeText(context, "没有找到补丁文件", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!path.getAbsolutePath().endsWith(DEX_FILE_E)){
-            Toast.makeText(context, "补丁文件格式不正确", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        File dexFilePath = context.getDir(FIX_DEX_PATH, Context.MODE_PRIVATE);
-        File dexFile = new File(dexFilePath, dexFileName);
-        if (dexFile.exists()) {
-            dexFile.delete();
-        }
-        //copy
-        InputStream is = null;
-        FileOutputStream os = null;
-        try {
-            is = new FileInputStream(path);
-            os = new FileOutputStream(dexFile);
-            int len = 0;
-            byte[] buffer = new byte[1024];
-            while ((len = is.read(buffer)) != -1) {
-                os.write(buffer, 0, len);
-            }
-            if (dexFile.exists() && copyAndFix) {
-                //复制成功,进行修复
-               // new MyHotFix().loadDex(context, dexFile);
-                File fixDir = context.getDir(FIX_DEX_PATH, Context.MODE_PRIVATE);
-                //mrege and fix
-                new MyHotFix().mergeDex(context, fixDir,dexFile);
-            }
-            // TODO: 2017/7/6
-           // path.delete();//删除sdcard中的补丁文件，或者你可以直接下载到app的路径中
-            is.close();
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
+    public void loadPatch(final File fixDexFile,final FixCallBack callBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String fixDexPath="fix_dex";//fixDex存储的路径
+                File dexFileDir = context.getDir(fixDexPath, Context.MODE_PRIVATE);
+                File copyDexFile = new File(dexFileDir, fixDexFile.getName());
+                if (copyDexFile.exists()) {
+                   // copyDexFile.delete();
+                    // TODO: 2017/7/8  本地文件是否一致，待验证
+                    boolean isSuccess=mergeDexAndApply(dexFileDir,copyDexFile);
+                    callBack.onPatchLoaded(isSuccess);
+                    return;
+                }
+                //copy
+                InputStream is = null;
+                FileOutputStream os = null;
                 try {
-                    is.close();
-                } catch (IOException e) {
+                    is = new FileInputStream(fixDexFile);
+                    os = new FileOutputStream(copyDexFile);
+                    int len = 0;
+                    byte[] buffer = new byte[1024];
+                    while ((len = is.read(buffer)) != -1) {
+                        os.write(buffer, 0, len);
+                    }
+                    if (copyDexFile.exists()) {
+                        //复制成功,进行修复
+
+                        //mrege and fix
+                        boolean isSuccess=mergeDexAndApply(dexFileDir,copyDexFile);
+                        callBack.onPatchLoaded(isSuccess);
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
+                    callBack.onPatchLoaded(false);
+                } finally {
+                    try {
+                        if (is != null) {
+                            is.close();
+                        }
+                        if (os != null) {
+                            os.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        }).start();
+
+    }
+    public interface FixCallBack
+    {
+        void onPatchLoaded(boolean isSucess);
     }
 }
