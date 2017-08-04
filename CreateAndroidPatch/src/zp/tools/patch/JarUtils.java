@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import zp.tools.patch.bean.FileInfo;
+
 public class JarUtils {
 	private static final String BASE_PATH = System.getProperty("user.dir") + "\\";
 	private static final String OLD_APK_PATH = BASE_PATH + "apk\\oldapk\\";
@@ -42,23 +44,33 @@ public class JarUtils {
 		// System.out.println(isSameFile(returnFiles.get(".svn\\wc.db-journal"),
 		// returnFiles.get(".svn\\wc.db-journal")));
 		// apkToJar(path+"\\SFLS.apk");
-//		
-//		copyFile(new File(OLD_APK_PATH+"SFLS.apk"), TEMP_OLD_APK_PATH);
-//		copyFile(new File(NEW_APK_PATH+"SFLS.apk"), TEMP_NEW_APK_PATH);
-//		waiting(5);
-//		apkToJar(TEMP_OLD_APK_PATH+"SFLS.apk");
-//		apkToJar(TEMP_NEW_APK_PATH+"SFLS.apk");
-//		waiting(15);
-//		decompressJar(TEMP_OLD_APK_PATH+"SFLS-dex2jar.jar", TEMP_OLD_CLASSES_PATH);
-//		decompressJar(TEMP_NEW_APK_PATH+"SFLS-dex2jar.jar", TEMP_NEW_CLASSES_PATH);
-		
-//		findDiff(TEMP_OLD_CLASSES_PATH,TEMP_NEW_CLASSES_PATH,TEMP_PATCH_CLASSES_PATH);
-		createPatch(TEMP_PATCH_CLASSES_PATH, "sfls_patch.dex",PATCH_PATH);
-		//step1:将apk生成jar包
-		//step2:解压jar包到指定位置
-		//step3:找到所有已修改过的class文件
-		//step4:生成补丁
 		FileUtils.deleteFiles(TEMP_PATH);
+		File oldApk=FileUtils.getFirstApkFileFromFolder(OLD_APK_PATH);
+		File newApk=FileUtils.getFirstApkFileFromFolder(NEW_APK_PATH);
+		if(oldApk==null||newApk==null)
+		{
+			System.out.println("请分别在apk\\oldapk和apk\\newapk目录中放入对应的安装包！");
+			return;
+		}
+		FileInfo oldFileInfo=FileUtils.getFileInfo(oldApk);
+		FileInfo newFileInfo=FileUtils.getFileInfo(newApk);
+		
+		FileUtils.copyFile(oldApk, TEMP_OLD_APK_PATH);
+		FileUtils.copyFile(newApk, TEMP_NEW_APK_PATH);
+		//step1:将apk生成jar包
+		apkToJar(TEMP_OLD_APK_PATH+oldFileInfo.getAllName());
+		apkToJar(TEMP_NEW_APK_PATH+newFileInfo.getAllName());
+		
+		
+		//step2:解压jar包到指定位置
+		decompressJar(TEMP_OLD_APK_PATH+oldFileInfo.getName()+"-dex2jar.jar", TEMP_OLD_CLASSES_PATH);
+		decompressJar(TEMP_NEW_APK_PATH+newFileInfo.getName()+"-dex2jar.jar", TEMP_NEW_CLASSES_PATH);
+		//step3:找到所有已修改过的class文件
+		FileUtils.findDiff(TEMP_OLD_CLASSES_PATH,TEMP_NEW_CLASSES_PATH,TEMP_PATCH_CLASSES_PATH);
+		//step4:生成补丁
+		createPatch(TEMP_PATCH_CLASSES_PATH, newFileInfo.getName()+"_patch.dex",PATCH_PATH);
+		
+		
 	}
 
 	
@@ -74,6 +86,8 @@ public class JarUtils {
 		try {
 			//exec(param3,param3,param3) param3 指定目录中执行命令
 			Runtime.getRuntime().exec("cmd.exe /c d2j-dex2jar " + apkPath,null,new File(apkPath.substring(0,apkPath.lastIndexOf("\\"))));
+			//生成jar包大概需要10s 左右
+			waiting(10);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -118,7 +132,7 @@ public class JarUtils {
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
-
+					FileUtils.closeStream(bin, bout);
 				}
 			}
 			zipFile.close();
@@ -151,7 +165,9 @@ public class JarUtils {
 			{
 				outputDir.mkdirs();
 			}
-			String cmd="cmd.exe /c dx --dex --output=" + patchOutputPath + patchName + " " + patchClassesPath;
+			String cmd="dx --dex --output=" + patchOutputPath + patchName + " " + patchClassesPath;
+			System.out.println("若补丁生成失败，请用cmd 执行下面命令查看失败原因：\n"+cmd);
+			cmd="cmd.exe /c "+cmd;
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -170,8 +186,16 @@ public class JarUtils {
 	
 	private static void waiting(int times)
 	{
+		if(times<0) return; 
+		int count=20;
+		int speed=times*1000/count;
 		try {
-			Thread.sleep(times*1000);
+			for(int i=0;i<count;i++)
+			{
+				System.out.print("★");
+				Thread.sleep(speed);
+			}
+			System.out.println();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

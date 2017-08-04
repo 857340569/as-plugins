@@ -3,12 +3,14 @@ package zp.tools.patch;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+
+import zp.tools.patch.bean.FileInfo;
 
 public class FileUtils {
 	
@@ -200,5 +202,45 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 得到制定目录下的第一个apk文件
+	 * @param folderPath
+	 * @return
+	 */
+	public static File getFirstApkFileFromFolder(String folderPath)
+	{
+		File dir=new File(folderPath);
+		if(dir.exists())
+		{
+			File[] files=dir.listFiles(new FilenameFilter() {
+				
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.toLowerCase().endsWith(".apk");
+				}
+			});
+			if(files.length>0)
+			{
+				return files[0];
+			}
+		}
+		return null;
+	}
 	
+	/**
+	 * 得到文件信息
+	 * @param srcFile
+	 * @return
+	 */
+	public static FileInfo getFileInfo(File srcFile)
+	{
+		if(srcFile==null||!srcFile.exists())return null;
+		String fileName=srcFile.getName();
+		FileInfo fileInfo=new FileInfo();
+		fileInfo.setAllName(fileName);
+		fileInfo.setName(fileName.split("\\.")[0]);
+		fileInfo.setSuffix(fileName.split("\\.")[1]);
+		fileInfo.setSrcFile(srcFile);
+		return fileInfo;
+	}
 }
