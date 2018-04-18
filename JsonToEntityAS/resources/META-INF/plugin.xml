@@ -1,16 +1,16 @@
 <idea-plugin>
   <id>com.onlypxz.plugins.GsonToEntity</id>
   <name>GsonToEntity</name>
-  <version>1.0</version>
+  <version>3.0</version>
   <vendor email="support@onlypxz.com" url="http://www.onlypxz.com">onlypxz</vendor>
 
   <description><![CDATA[
-     gson data to java entity.<br>
+     gson data to java/kotlin entity.<br>
       <em>for AS</em>
     ]]></description>
 
   <change-notes><![CDATA[
-     gson data to java entity
+     gson data to java/kotlin entity
     ]]>
   </change-notes>
 

@@ -63,13 +63,13 @@ public class JsonToEntityV2 extends BaseFrame {
 		label.setBounds(56, 10, 54, 15);
 		contentPane.add(label);
 		
-		final JRadioButton rdbtnV_1 = new JRadioButton("V1.0");
-		rdbtnV_1.setBounds(116, 6, 54, 23);
+		final JRadioButton rdbtnV_1 = new JRadioButton("Java");
+		rdbtnV_1.setBounds(116, 6, 80, 23);
 //		
 		
-		JRadioButton rdbtnV_2 = new JRadioButton("V2.0");
+		JRadioButton rdbtnV_2 = new JRadioButton("Kotlin");
 		rdbtnV_2.setSelected(true);
-		rdbtnV_2.setBounds(183, 6, 54, 23);
+		rdbtnV_2.setBounds(210, 6, 80, 23);
 		
 		ButtonGroup levelBtnGroup=new ButtonGroup();
 		levelBtnGroup.add(rdbtnV_1);
@@ -120,16 +120,17 @@ public class JsonToEntityV2 extends BaseFrame {
 				String content="";
 				if(rdbtnV_1.isSelected())
 				{
-					content= AutoEntityFile.createFileFromJson(json, className, false);
+					content= AutoEntityFile.getEntityContent(json, className);
 					
 				}else {
-					content=AutoEntityFile.getEntityContent(json, className);
+					AutoEntityFile.isInnerClass=null;
+					content=AutoEntityFile.getEntityContentKotlin(json, className);
 				}
 				StringUtils.setSystemClipboard(content);
 				contenteditorPane.setText(content);
 			}
 		});
-		button.setBounds(183, 332, 161, 35);
+		button.setBounds(210, 332, 161, 35);
 		button.setFocusPainted(false);
 		contentPane.add(button);
 		contentPane.add(jsonScrollPane);
